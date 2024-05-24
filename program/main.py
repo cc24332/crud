@@ -115,28 +115,98 @@ def incluir ():
         print("Cadastro mal sucedido!")
 
 
-def procurar ():
-    print('Opção não implementada!')
-    # Ficar pedindo para digitar um nome até digitar um nome que existe
-    # cadastrado;
-    # mostrar então na tela TODOS os demais dados encontrados 
-    # sobre aquela pessoa.
+def procurar():
+    digitouDireito = False
+    while not digitouDireito:
+        nome = input('Nome: ').lower().title() # Deixar o nome todo em minúsculo para facilitar a procura do nome, e .title() para deixar toda letra do início da palavra maiúscula (estética)
 
-def atualizar ():
-    print('Opção não implementada!')
-    # Ficar mostrando um menu oferecendo as opções de atualizar aniversário, ou
-    # endereco, ou telefone, ou celular, ou email, ou finalizar as
-    # atualizações; ficar pedindo para digitar a opção até digitar uma
-    # opção válida; realizar a atulização solicitada; até ser escolhida a
-    # opção de finalizar as atualizações.
-    # USAR A FUNÇÃO opcaoEscolhida, JÁ IMPLEMENTADA, PARA FAZER O MENU
+        cursor = connection.cursor()
+        cursor.execute(f"SELECT * FROM crud.contatos WHERE nome = '{nome}'")
+        dados_selecionados = cursor.fetchall()
 
-def listar ():
-    print('Opção não implementada!')
-    # implementar aqui a listagem de todos os dados de todos
-    # os contatos cadastrados
-    # printar aviso de que não há contatos cadastrados se
-    # esse for o caso
+        if not dados_selecionados:
+            print('Pessoa inexistente - Favor redigitar...')
+        else:
+            digitouDireito = True
+
+    print("\nOs dados de", nome, "são:") # Mostrar o nome do contato
+
+    print('Aniversário:', dados_selecionados[0][1]) # Mostrar o aniversário do contato
+    print('Endereço:', dados_selecionados[0][2]) # Mostrar o endereço do contato
+    print('Telefone:', dados_selecionados[0][3]) # Mostrar o telefone do contato
+    print('Celular:', dados_selecionados[0][4]) # Mostrar o celular do contato
+    print('E-mail:', dados_selecionados[0][5]) # Mostrar o email do contato
+
+def atualizar():
+    digitouDireito = False
+    while not digitouDireito:
+        nome = input('Nome da pessoa que você deseja atualizar: ').lower().title()
+
+        cursor = connection.cursor()
+        cursor.execute(f"SELECT * FROM crud.contatos WHERE nome = '{nome}'")
+        dados_selecionados = cursor.fetchall()
+
+        if not dados_selecionados:
+            print('Pessoa inexistente - Favor redigitar...')
+        else:
+            digitouDireito = True
+
+    print("\nAtualizando os dados de:", nome)
+
+    opcoesAtualizacao = ['Atualizar aniversário', 'Atualizar endereço', 'Atualizar telefone', 'Atualizar celular', 'Atualizar e-mail', 'Finalizar atualizações']
+
+    while True:
+        opcao_atualizacao = opcaoEscolhida(opcoesAtualizacao)
+
+        if opcao_atualizacao == '6':
+            break
+        elif opcao_atualizacao == '1':
+            novoAniversario = input("Digite a nova data de aniversário: ")
+            cursor.execute(f"UPDATE crud.contatos SET aniversario = '{novoAniversario}' WHERE nome = '{nome}'")
+            connection.commit()
+            print("Nova data de aniversário atualizada com sucesso!")
+        elif opcao_atualizacao == '2':
+            novoEndereco = input("Digite o novo endereço: ")
+            cursor.execute(f"UPDATE crud.contatos SET endereco = '{novoEndereco}' WHERE nome = '{nome}'")
+            connection.commit()
+            print("Novo endereço atualizado com sucesso!")
+        elif opcao_atualizacao == '3':
+            novoTelefone = input("Digite o novo número de telefone: ")
+            cursor.execute(f"UPDATE crud.contatos SET telefone = '{novoTelefone}' WHERE nome = '{nome}'")
+            connection.commit()
+            print("Novo número de telefone atualizado com sucesso!")
+        elif opcao_atualizacao == '4':
+            novoCelular = input("Digite o novo número de celular: ")
+            cursor.execute(f"UPDATE crud.contatos SET celular = '{novoCelular}' WHERE nome = '{nome}'")
+            connection.commit()
+            print("Novo número de celular atualizado com sucesso!")
+        elif opcao_atualizacao == '5':
+            novoEmail = input("Digite o novo e-mail: ")
+            cursor.execute(f"UPDATE crud.contatos SET email = '{novoEmail}' WHERE nome = '{nome}'")
+            connection.commit()
+            print("Novo e-mail atualizado com sucesso!")
+
+    print("\nAtualizações feitas com sucesso!")
+     
+
+def listar():
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM crud.contatos")
+    contatos = cursor.fetchall()
+
+    if not contatos:
+        print("Ninguém foi cadastrado ainda!")
+    else:
+        print("\nTodos os contatos a seguir:")
+        for contato in contatos:
+            print()
+            print('Nome:', contato[1]) # 1 representa o índice do campo 'nome' na tabela
+            print('Aniversário:', contato[2]) # 2 representa o índice do campo 'aniversario' na tabela
+            print('Endereço:', contato[3]) # 3 representa o índice do campo 'endereco' na tabela
+            print('Telefone:', contato[4]) # 4 representa o índice do campo 'telefone' na tabela
+            print('Celular:', contato[5]) # 5 representa o índice do campo 'celular' na tabela
+            print('E-mail:', contato[6]) # 6 representa o índice do campo 'email' na tabela
+
 
 def excluir ():
     digitouDireito=False
