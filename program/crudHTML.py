@@ -161,6 +161,21 @@ def atualizar():
             print("Nova categoria atualizada com sucesso!")
 
     print("\nAtualizações feitas com sucesso!")
+
+def listar():
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM daroca.produtos")
+    produtos = cursor.fetchall()
+
+    if not produtos:
+        print("Nenhum produto foi cadastrado ainda!")
+    else:
+        print("\nTodos os produtos a seguir:")
+        for i in produtos:
+            print()
+            print('Nome do produto:', i[1])
+            print('Valor: {:.2f}'.format(i[3]))
+            print('Categoria:', i[5])
      
 
 def excluir ():
@@ -218,10 +233,11 @@ if not sucessoNoAcessoAoBD:
 menu=['Incluir Produto',\
       'Atualizar Produto',\
       'Excluir Produto',\
+      'Listar produtos',\
       'Sair do Programa']
 
 opcao=666
-while opcao!=4:
+while opcao!=5:
     opcao = int(opcaoEscolhida(menu))
 
     if opcao==1:
@@ -230,5 +246,7 @@ while opcao!=4:
         atualizar()
     elif opcao==3:
         excluir()
+    elif opcao==4:
+        listar()
         
 print('OBRIGADO POR USAR ESTE PROGRAMA!')
