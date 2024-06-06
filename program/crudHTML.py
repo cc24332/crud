@@ -7,7 +7,7 @@ def apresenteSe ():
     print('|                                                             |')
     print('| Murilo & Vinicius                                           |')
     print('|                                                             |')
-    print('| Versão 1.0 de 28/maio /2024                                 |')
+    print('| Versão 1.0 de 28/maio/2024                                  |')
     print('|                                                             |')
     print('+-------------------------------------------------------------+')
 
